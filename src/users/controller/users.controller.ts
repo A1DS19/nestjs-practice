@@ -9,10 +9,8 @@ import {
   Post,
   Query,
   Session,
-  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../../interceptors/serialize.interceptor';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { SigninUserDto } from '../dto/signin-user.dto';
