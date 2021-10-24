@@ -1,22 +1,18 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { UsersController } from './controller/users.controller';
 import { UsersService } from './service/users.service';
 import { AuthService } from './service/auth/auth.service';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CurrentUserMiddleware } from './middleware/current-user.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
-  providers: [
-    UsersService,
-    AuthService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentUserInterceptor,
-    },
-  ],
+  providers: [UsersService, AuthService],
 })
-export class UsersModule {}
+export class UsersModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+  }
+}
